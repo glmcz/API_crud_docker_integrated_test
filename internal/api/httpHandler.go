@@ -63,6 +63,7 @@ func (a *API) postRequests(w http.ResponseWriter, r *http.Request) {
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
 		log.Println("Error reading body:", err)
+		WriteResponse(w, nil)
 		return
 	}
 	log.Printf("Received body: %s", string(body))
@@ -81,12 +82,18 @@ func (a *API) postRequests(w http.ResponseWriter, r *http.Request) {
 func (a *API) getRequests(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
 		rawQuery := r.URL.RawQuery
-		userID := strings.Split(rawQuery, "=")[1]
-		if len(userID) == 0 {
-			WriteResponse(w, fmt.Errorf("user ID is empty"))
+		if rawQuery == "" {
+			WriteResponse(w, nil)
+			return
 		}
 
-		// get user from database
+		parts := strings.Split(rawQuery, "=")
+		if len(parts) < 2 || parts[0] == "" {
+			http.Error(w, "Invalid query parameter", http.StatusBadRequest)
+			WriteResponse(w, nil)
+		}
+
+		userID := parts[1]
 		user, err := a.DBConnection.(*repository.PostgresRepository).GetUser(uuid.MustParse(userID))
 		if err != nil {
 			fmt.Printf(err.Error())
