@@ -9,14 +9,15 @@ jobs:
     unit-tests:
       name: Unit Tests
       runs-on: ubuntu-latest
-      postgres:
-        image: postgres:16
-        env:
-          - POSTGRES_DB=users
-          - POSTGRES_USER=gorm
-          - POSTGRES_PASSWORD=gorm
-        ports:
-          - "5432:5432"
+      services:
+        postgres:
+          image: postgres:16
+          env:
+            - POSTGRES_DB=users
+            - POSTGRES_USER=gorm
+            - POSTGRES_PASSWORD=gorm
+          ports:
+            - "5432:5432"
 
       steps:
         - uses: actions/checkout@v4
