@@ -1,13 +1,11 @@
 package api
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
 	"github.com/google/uuid"
 	"io"
 	"net/http"
-	"net/http/httptest"
 	"simpleCloudService/internal/model"
 	"testing"
 
@@ -46,44 +44,6 @@ func testData() []struct {
 		},
 	}
 	return testCases
-}
-
-func TestPostHandler(t *testing.T) {
-	testCases := testData()
-
-	api := API{}
-	mux := api.Muxer()
-
-	go func() {
-		err := http.ListenAndServe(":3000", mux)
-		if err != nil {
-			return
-		}
-	}()
-
-	for _, req := range testCases {
-		body, err := json.Marshal(req.userReq)
-		if err != nil {
-			t.Error(err)
-		}
-		postReq := httptest.NewRequest("POST", "/save", bytes.NewReader(body))
-		postReq.Header.Add("Content-Type", "application/json")
-
-		res := httptest.NewRecorder()
-		mux.ServeHTTP(res, postReq)
-		if res.Code == 200 {
-			println(res.Code)
-		}
-
-		getReq := httptest.NewRequest("GET", "/"+req.userReq.ID.String(), bytes.NewReader(body))
-		getReq.Header.Add("Content-Type", "application/json")
-
-		resGet := httptest.NewRecorder()
-		mux.ServeHTTP(resGet, getReq)
-		if resGet.Code == 200 {
-			println("Get response", resGet.Code)
-		}
-	}
 }
 
 func TestPostEndpointWithHTTPClient(t *testing.T) {
