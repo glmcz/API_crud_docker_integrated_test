@@ -1,0 +1,38 @@
+services:
+  postgres:
+    container_name: postgres
+    build:
+      context: ..
+      dockerfile: ./build/postgress.dockerfile
+    ports:
+      - "5432:5432"
+    volumes:
+      # host:docker inner path
+      - postgres_storage:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=users
+      - POSTGRES_USER=gorm
+      - POSTGRES_PASSWORD=gorm
+    networks:
+      - app_network
+
+  app:
+    container_name: goApp
+    build:
+      context: ..
+      dockerfile: ./build/app.dockerfile
+    networks:
+      - app_network
+    depends_on:
+      - postgres
+    ports:
+      - "3000:3000"
+
+
+volumes:
+#  since it is empty it will mount nothing
+  postgres_storage:
+
+networks:
+  app_network:
+    driver: bridge

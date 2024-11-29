@@ -1,0 +1,23 @@
+name: CI tests
+on: [pull_request, workflow_dispatch]
+
+concurrency:
+  cancel-in-progress: true
+
+jobs:
+    unit-tests:
+      name: Unit Tests
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v4
+        - uses: actions/setup-go@v5
+          with:
+            go-version: '1.23'
+        - name: Run tests
+          run: |
+            make deps
+            make run &
+            sleep 2
+
+        - name: Run tests
+          run: make test

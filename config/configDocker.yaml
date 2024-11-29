@@ -1,0 +1,8 @@
+
+server:
+  address: :3000
+
+postgres:
+  uri: "host=postgres user=gorm password=gorm dbname=gorm port=5432 sslmode=disable TimeZone=Asia/Shanghai"
+  database: users
+
