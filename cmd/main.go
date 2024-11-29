@@ -15,7 +15,7 @@ func main() {
 				Name:    "config_file",
 				Aliases: []string{"c"},
 				Usage:   "set config file path",
-				Value:   "./config/config.yaml",
+				Value:   "./config/configDocker.yaml",
 				EnvVars: []string{"CONFIG_FILE"},
 			},
 		},
