@@ -13,9 +13,9 @@ jobs:
         postgres:
           image: postgres:16
           env:
-            - POSTGRES_DB=users
-            - POSTGRES_USER=gorm
-            - POSTGRES_PASSWORD=gorm
+            POSTGRES_DB=users
+            POSTGRES_USER=gorm
+            POSTGRES_PASSWORD=gorm
           ports:
             - "5432:5432"
 
