@@ -46,18 +46,17 @@ func testData() []struct {
 	return testCases
 }
 
-func TestPostEndpointWithHTTPClient(t *testing.T) {
+func PostEndpointWithHTTPClient(t *testing.T) {
 	testData := testData()
 	client := &testClient.Client{}
 	for _, user := range testData {
-		request, err := client.ServerPostRequest("3000", user.userReq, "/save")
+		request, err := client.ServerPostRequest("3000", user.userReq, "save")
 		if err != nil {
-			return
+			t.Errorf("Error while posting user: %v", err)
 		}
 		if request.StatusCode == http.StatusOK {
 			fmt.Printf("Successfully saved user [%s]\n", user.userReq.Name)
 		} else {
-			// TODO handle existing users in DB
 			// need to add proper response that user already exist.
 			fmt.Printf("Failed to save user [%s]\n", user.userReq.Name)
 		}
@@ -69,7 +68,7 @@ func TestPostEndpointWithHTTPClient(t *testing.T) {
 	}
 }
 
-func TestGetEndpointWithHTTPClient(t *testing.T) {
+func GetEndpointWithHTTPClient(t *testing.T) {
 	testData := testData()
 	client := &testClient.Client{}
 	for _, user := range testData {
@@ -88,7 +87,7 @@ func TestGetEndpointWithHTTPClient(t *testing.T) {
 		} else {
 			// TODO handle non-existing users in DB in case of parallel testing
 			// need to add proper response that user already exist.
-			fmt.Printf("Failed to get user [%s]\n", user.userReq.Name)
+			t.Errorf("Failed to get user [%s]\n", user.userReq.Name)
 		}
 
 		err = response.Body.Close()
@@ -96,6 +95,11 @@ func TestGetEndpointWithHTTPClient(t *testing.T) {
 			t.Errorf("failed to close response body %v", err)
 		}
 	}
+}
+
+func TestHTTPRequest(t *testing.T) {
+	t.Run("Post", PostEndpointWithHTTPClient)
+	t.Run("Get", GetEndpointWithHTTPClient)
 }
 
 func readResponse(body io.ReadCloser, user *model.User) error {

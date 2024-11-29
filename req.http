@@ -1,12 +1,24 @@
 
 
-curl -X POST -H "Content-Type: application/json" \
--d '{
-"id": "1",
-"name": "John Doe",
-"email": "john.doe@example.com",
-"date_of_birth": "1990-01-01"
-}' http://localhost:3000/save
+POST http://localhost:3000/save
+Content-Type: application/json
+
+{
+  "id": "224e9a8e-5571-48d3-9da4-c18a1974e268",
+  "name": "John Doe",
+  "email": "john.doe@example.com",
+  "date_of_birth": "1990-01-01"
+}
+
+### /v1/develop/test-results
+GET http://localhost:8083/v1/develop/test-results
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJFZERTQSJ9.eyJpc3MiOiJjdXN0b21lcl9hY2Nlc3MiLCJzdWIiOiIwMThmNjdlMS1lMDQ5LTcxMmUtYTEwYi1jNDlhYzFlZTcyOGEiLCJleHAiOjE3MTg5NjYwODIsImp0aSI6IjAxSFo5TlZCOTdCQzlaNkJCNjgzRVJTNjhLIn0.9s08Dh5CAKUHVnYTtL8aQS5W7Fpe_sHkrVOnlBF-w_0mTnfEGmQ3YOSVVzDwlOo0iJqRqV0uD8R-bdATSNdQBg
+Content-Type: application/json
 
 
-curl -X GET http://localhost:3000/?id=224e9a8e-5571-48d3-9da4-c18a1974e561
+
+### get user
+GET http://localhost:3000/224e9a8e-5571-48d3-9da4-c18a1974e268
+Content-Type: application/json
+Accept-Language: en
+

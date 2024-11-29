@@ -33,7 +33,7 @@ func Run(ctx context.Context, serviceName string, configFile string) error {
 		return fmt.Errorf("database connection failed: %w", err)
 	}
 
-	//create an empty repo
+	//create an empty table
 	err = postgresRepository.EmptyAutoMigrate()
 	if err != nil {
 		return fmt.Errorf("failed to create init table Users: %w", err)

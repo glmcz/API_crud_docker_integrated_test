@@ -18,7 +18,7 @@ func (c *Client) ServerPostRequest(port string, testData interface{}, endpoint s
 		return nil, fmt.Errorf("failed to marshal JSON: %w", err)
 	}
 	body := bytes.NewReader(payloadBytes)
-	req, err := http.NewRequest(http.MethodPost, fmt.Sprintf("http://localhost:%s%s", port, endpoint), body)
+	req, err := http.NewRequest(http.MethodPost, fmt.Sprintf("http://localhost:%s/%s", port, endpoint), body)
 	if err != nil {
 		return nil, fmt.Errorf("failed to send request: %w", err)
 	}
@@ -29,7 +29,7 @@ func (c *Client) ServerPostRequest(port string, testData interface{}, endpoint s
 }
 
 func (c *Client) ServerGetRequest(port string, userID string) (*http.Response, error) {
-	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("http://localhost:%s/?id=%s", port, userID), nil)
+	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("http://localhost:%s/%s", port, userID), nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to send request: %w", err)
 	}

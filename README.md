@@ -1,4 +1,10 @@
 
+### Simples Rest service in go.
+- app wait for Postgres start
+- handle post and get req
+- github action included
+
+## Tested with curl below.
 
 curl -X POST -H "Content-Type: application/json" \                                                                                                         ⬢  system at 12:44:44
 -d '{ "id": "224e9a8e-5571-48d3-9da4-c18a1974e268",

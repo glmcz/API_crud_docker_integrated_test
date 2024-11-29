@@ -8,8 +8,6 @@ import (
 	"io"
 	"log"
 	"net/http"
-	"strings"
-
 	"simpleCloudService/internal/model"
 	"simpleCloudService/internal/repository"
 )
@@ -52,8 +50,6 @@ func WriteResponse(w http.ResponseWriter, response interface{}) {
 			return
 		}
 	}
-
-	// No need to explicitly call w.WriteHeader(req.http.StatusOK) after writing the body.
 }
 
 func (a *API) postRequests(w http.ResponseWriter, r *http.Request) {
@@ -81,19 +77,8 @@ func (a *API) postRequests(w http.ResponseWriter, r *http.Request) {
 
 func (a *API) getRequests(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
-		rawQuery := r.URL.RawQuery
-		if rawQuery == "" {
-			WriteResponse(w, nil)
-			return
-		}
-
-		parts := strings.Split(rawQuery, "=")
-		if len(parts) < 2 || parts[0] == "" {
-			http.Error(w, "Invalid query parameter", http.StatusBadRequest)
-			WriteResponse(w, nil)
-		}
-
-		userID := parts[1]
+		rawQuery := r.URL.Path
+		userID := rawQuery[1:]
 		user, err := a.DBConnection.(*repository.PostgresRepository).GetUser(uuid.MustParse(userID))
 		if err != nil {
 			fmt.Printf(err.Error())
