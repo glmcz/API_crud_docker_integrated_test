@@ -1,4 +1,4 @@
-.PHONY: build generate-proto lint
+.PHONY: build lint
 
 clean:
 	rm build/app && rm build/app-linux
