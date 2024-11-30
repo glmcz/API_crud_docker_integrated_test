@@ -1,6 +1,7 @@
 .PHONY: build generate-proto lint
 
-
+clean:
+	rm build/app && rm build/app-linux
 
 deps:
 	go get ./...
@@ -28,6 +29,9 @@ build-linux:
 
 fmt:
 	gofmt -s -w . && gofumpt -w .
+
+lint: ## Run all the linters
+	docker run --rm -v $(PWD):/app -w /app golangci/golangci-lint:v1.59.1 golangci-lint run ./...
 
 run:
 	go run ./cmd/*.go

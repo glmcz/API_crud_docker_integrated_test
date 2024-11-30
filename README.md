@@ -4,6 +4,11 @@
 - handle post and get req
 - github action included
 
+## How to run?
+- make build-linux
+- make compose-up
+- And that`s all.
+
 ## Tested with curl below.
 
 curl -X POST -H "Content-Type: application/json" \                                                                                                         ⬢  system at 12:44:44
