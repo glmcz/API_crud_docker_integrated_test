@@ -1,13 +1,13 @@
 
 ### Simples Rest service in go.
-- app wait for Postgres start
+- The app waits for Postgres to start
 - handle post and get req
-- github action included
+- GitHub action included
 
 ## How to run?
 - make build-linux
 - make compose-up
-- And that`s all.
+- Or inside IDE GoLand.
 
 ## Tested with curl below.
 
