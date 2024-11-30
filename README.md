@@ -19,4 +19,4 @@ curl -X POST -H "Content-Type: application/json" \                              
 }' http://localhost:3000/save
 
 
-curl -X GET "http://localhost:3000/?id=224e9a8e-5571-48d3-9da4-c18a1974e268"
+curl -X GET "http://localhost:3000/224e9a8e-5571-48d3-9da4-c18a1974e268"
