@@ -18,7 +18,7 @@ import (
 	"simpleCloudService/internal/repository"
 )
 
-func Run(ctx context.Context, serviceName string, configFile string) error {
+func Run(ctx context.Context, configFile string) error {
 	// handle manual interrupt
 	ctx, cancel := signal.NotifyContext(ctx, syscall.SIGTERM, syscall.SIGINT)
 	defer cancel()
@@ -39,11 +39,11 @@ func Run(ctx context.Context, serviceName string, configFile string) error {
 		return fmt.Errorf("failed to create init table Users: %w", err)
 	}
 
-	middleware := api.NewAPI(postgresRepository)
+	layer := api.NewAPI(postgresRepository)
 
 	server := http.Server{
 		Addr:    cfg.ServerConfig.Address,
-		Handler: middleware.Muxer(),
+		Handler: layer.Muxer(),
 	}
 
 	serverErrors := make(chan error, 1)

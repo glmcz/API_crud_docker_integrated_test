@@ -3,13 +3,13 @@ package api
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"github.com/google/uuid"
 	"io"
 	"log"
 	"net/http"
 	"simpleCloudService/internal/model"
 	"simpleCloudService/internal/repository"
+	utils "simpleCloudService/pkg/http"
 )
 
 type ServerConfig struct {
@@ -33,44 +33,36 @@ func (a *API) Muxer() *http.ServeMux {
 	return mux
 }
 
-func WriteResponse(w http.ResponseWriter, response interface{}) {
-	w.Header().Set("Content-Type", "application/json")
-	if response == nil {
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	} else {
-		res, err := json.Marshal(response)
-		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			return
-		}
-		_, err = w.Write(res)
-		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			return
-		}
-	}
-}
-
 func (a *API) postRequests(w http.ResponseWriter, r *http.Request) {
 	println("postRequests")
 	var user model.User
 
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
-		log.Println("Error reading body:", err)
-		WriteResponse(w, nil)
+		response := utils.HttpResponse{
+			Code: http.StatusInternalServerError,
+			Msg:  err.Error(),
+		}
+		response.WriteResponse(w)
 		return
 	}
 	log.Printf("Received body: %s", string(body))
 
 	if err := json.NewDecoder(bytes.NewReader(body)).Decode(&user); err != nil {
-		fmt.Printf(err.Error())
-		WriteResponse(w, nil)
+		response := utils.HttpResponse{
+			Code: http.StatusInternalServerError,
+			Msg:  err.Error(),
+		}
+		response.WriteResponse(w)
 	}
 
 	err = a.DBConnection.(*repository.PostgresRepository).CreateUser(&user)
 	if err != nil {
+		response := utils.HttpResponse{
+			Code: http.StatusInternalServerError,
+			Msg:  err.Error(),
+		}
+		response.WriteResponse(w)
 		return
 	}
 }
@@ -81,11 +73,24 @@ func (a *API) getRequests(w http.ResponseWriter, r *http.Request) {
 		userID := rawQuery[1:]
 		user, err := a.DBConnection.(*repository.PostgresRepository).GetUser(uuid.MustParse(userID))
 		if err != nil {
-			fmt.Printf(err.Error())
-			WriteResponse(w, nil)
+			response := utils.HttpResponse{
+				Code: http.StatusBadRequest,
+				Msg:  err.Error(),
+			}
+			response.WriteResponse(w)
 		}
-		WriteResponse(w, user)
+
+		response := utils.HttpResponse{
+			Code: http.StatusOK,
+			Msg:  user.ToString(),
+		}
+		response.WriteResponse(w)
+
 	} else {
-		WriteResponse(w, nil)
+		response := utils.HttpResponse{
+			Code: http.StatusBadRequest,
+			Msg:  "Try different http method",
+		}
+		response.WriteResponse(w)
 	}
 }
