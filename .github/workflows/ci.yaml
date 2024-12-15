@@ -27,7 +27,7 @@ jobs:
         - name: Run tests
           run: |
             make deps
-            make run &
+            make run-local &
             sleep 4
 
         - name: Run tests

@@ -1,7 +1,7 @@
 
 ### The simplest http server
-- Server with default templates ca be started on port :3000 by this cmd:
-  - make run
+- Server with default templates can be started on port :3000 by this cmd:
+  - make run-local
 - The app waits for Postgres to start
 - handle post and get req
 - GitHub action included

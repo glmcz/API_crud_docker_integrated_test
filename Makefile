@@ -33,12 +33,9 @@ fmt:
 lint: ## Run all the linters
 	docker run --rm -v $(PWD):/app -w /app golangci/golangci-lint:v1.59.1 golangci-lint run ./...
 
-run:
-	go run ./cmd/*.go
-
 
 run-local:
-	make build && cd ./build && ./app -p 3001 -t ../static -c ../config/config.yaml
+	make build && cd ./build && ./app -p 3000 -t ../static -c ../config/config.yaml
 
 
 #run app and db in docker
