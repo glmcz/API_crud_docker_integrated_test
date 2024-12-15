@@ -1,17 +1,17 @@
 package config
 
 import (
-	"simpleCloudService/internal/api"
 	"simpleCloudService/internal/repository"
+	"simpleCloudService/internal/serviceLayer"
 )
 
 type Config struct {
-	ServerConfig   api.ServerConfig          `yaml:"server"`
+	ServerConfig   serviceLayer.ServerConfig `yaml:"server"`
 	PostgresConfig repository.PostgresConfig `yaml:"postgres"`
 	// tracer ...
 }
 
-func NewDefaultConfig(service string) Config {
+func NewDefaultConfig() Config {
 	var cfg Config
 
 	return cfg

@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"simpleCloudService/internal/middleware"
 	"strconv"
 	"syscall"
 	"time"
@@ -15,8 +16,8 @@ import (
 	"gopkg.in/yaml.v3"
 
 	"simpleCloudService/cmd/config"
-	"simpleCloudService/internal/api"
 	"simpleCloudService/internal/repository"
+	"simpleCloudService/internal/serviceLayer"
 )
 
 func Run(ctx context.Context, configFile string, port int, templatePath string) error {
@@ -24,7 +25,7 @@ func Run(ctx context.Context, configFile string, port int, templatePath string) 
 	ctx, cancel := signal.NotifyContext(ctx, syscall.SIGTERM, syscall.SIGINT)
 	defer cancel()
 
-	cfg := config.NewDefaultConfig(configFile)
+	cfg := config.NewDefaultConfig()
 	if err := load(configFile, &cfg); err != nil {
 		return fmt.Errorf("failed to load config: %w", err)
 	}
@@ -40,15 +41,18 @@ func Run(ctx context.Context, configFile string, port int, templatePath string) 
 		return fmt.Errorf("failed to create init table Users: %w", err)
 	}
 
-	layer := api.NewAPI(postgresRepository) // TODO add template
+	layer := serviceLayer.NewServiceLayer(postgresRepository, templatePath)
+	if layer == nil {
+		return errors.New("failed to init server layers")
+	}
 
 	server := http.Server{
 		Addr:    cfg.ServerConfig.Address,
-		Handler: layer.Muxer(),
+		Handler: middleware.SecureHeadersMiddleware(layer.Muxer()),
 	}
 
 	if port > 0 && templatePath != "" {
-		server.Addr = strconv.Itoa(port)
+		server.Addr = ":" + strconv.Itoa(port)
 	}
 
 	serverErrors := make(chan error, 1)

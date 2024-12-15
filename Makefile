@@ -37,6 +37,10 @@ run:
 	go run ./cmd/*.go
 
 
+run-local:
+	make build && cd ./build && ./app -p 3001 -t ../static -c ../config/config.yaml
+
+
 #run app and db in docker
 compose-up:
 	cd deployment &&  docker rmi deployment-app -f  && docker-compose -f compose.yaml up -d

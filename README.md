@@ -1,10 +1,12 @@
 
-### Simples Rest service in go.
+### The simplest http server
+- Server with default templates ca be started on port :3000 by this cmd:
+  - make run
 - The app waits for Postgres to start
 - handle post and get req
 - GitHub action included
 
-## How to run?
+## How to run inside Docker?
 - make build-linux
 - make compose-up
 - Or inside IDE GoLand.

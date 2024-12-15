@@ -1,4 +1,4 @@
-package api
+package serviceLayer
 
 import (
 	"encoding/json"

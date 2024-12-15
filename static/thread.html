@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Threat data</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        h2 {
+            color: #555;
+            margin: 10px 0;
+        }
+        .variants {
+            margin-top: 20px;
+        }
+        .variant {
+            background: #f9f9f9;
+            padding: 10px;
+            margin: 10px 0;
+            border-left: 4px solid #2196f3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Threat record</h1>
+        <h2>Threat Name: {{.ThreatName}}</h2>
+        <h2>Category: {{.Category}}</h2>
+        <h2>Size: {{.Size}} bytes</h2>
+        <h2>Detection Date: {{.DetectionDate}}</h2>
+
+        <div class="variants">
+            <h2>Variants:</h2>
+            {{if .Variants}}
+                {{range .Variants}}
+                    <div class="variant">
+                        <p><strong>Name:</strong> {{.Name}}</p>
+                        <p><strong>Date Added:</strong> {{.DateAdded}}</p>
+                    </div>
+                {{end}}
+            {{else}}
+            <p>No known variants are available in the provided JSON data. Check attribute naming.</p>
+            {{end}}
+        </div>
+    </div>
+</body>
+</html>

@@ -19,16 +19,16 @@ func main() {
 				EnvVars: []string{"CONFIG_FILE"},
 			},
 			&cli.IntFlag{
-				Name:    "port_num",
+				Name:    "port",
 				Aliases: []string{"p"},
-				Usage:   "set port_num",
+				Usage:   "set port",
 				Value:   8080,
 			},
 			&cli.StringFlag{
 				Name:    "template",
 				Aliases: []string{"t"},
-				Usage:   "set template path",
-				Value:   "./templates/index.html",
+				Usage:   "set template dir path",
+				Value:   "./static/index.html",
 			},
 		},
 

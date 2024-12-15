@@ -10,15 +10,34 @@ Content-Type: application/json
   "date_of_birth": "1990-01-01"
 }
 
-### /v1/develop/test-results
-GET http://localhost:8083/v1/develop/test-results
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJFZERTQSJ9.eyJpc3MiOiJjdXN0b21lcl9hY2Nlc3MiLCJzdWIiOiIwMThmNjdlMS1lMDQ5LTcxMmUtYTEwYi1jNDlhYzFlZTcyOGEiLCJleHAiOjE3MTg5NjYwODIsImp0aSI6IjAxSFo5TlZCOTdCQzlaNkJCNjgzRVJTNjhLIn0.9s08Dh5CAKUHVnYTtL8aQS5W7Fpe_sHkrVOnlBF-w_0mTnfEGmQ3YOSVVzDwlOo0iJqRqV0uD8R-bdATSNdQBg
-Content-Type: application/json
-
-
-
 ### get user
-GET http://localhost:3000/224e9a8e-5571-48d3-9da4-c18a1974e268
+GET http://localhost:3000/user/224e9a8e-5571-48d3-9da4-c18a1974e268
 Content-Type: application/json
 Accept-Language: en
 
+
+### get mainPage
+GET http://localhost:3000
+Content-Type: application/json
+Accept-Language: en
+
+### post req for displayint json on web page.
+POST http://localhost:3000/request
+Content-Type: application/json
+
+{
+  "threatName": "Win32/Rbot",
+  "category": "trojan",
+  "size": 437289,
+  "detectionDate": "2019-04-01",
+  "variants": [
+    {
+      "name": "Win32/TrojanProxy.Emotet.A",
+      "dateAdded": "2019-04-10"
+    },
+    {
+      "name": "Win32/TrojanProxy.Emotet.B",
+      "dateAdded": "2019-04-22"
+    }
+  ]
+}

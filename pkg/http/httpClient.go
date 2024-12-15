@@ -29,7 +29,7 @@ func (c *Client) ServerPostRequest(port string, testData interface{}, endpoint s
 }
 
 func (c *Client) ServerGetRequest(port string, userID string) (*http.Response, error) {
-	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("http://localhost:%s/%s", port, userID), nil)
+	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("http://localhost:%s/user/%s", port, userID), nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to send request: %w", err)
 	}
