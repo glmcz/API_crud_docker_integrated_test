@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"strconv"
 	"syscall"
 	"time"
 
@@ -18,7 +19,7 @@ import (
 	"simpleCloudService/internal/repository"
 )
 
-func Run(ctx context.Context, configFile string) error {
+func Run(ctx context.Context, configFile string, port int, templatePath string) error {
 	// handle manual interrupt
 	ctx, cancel := signal.NotifyContext(ctx, syscall.SIGTERM, syscall.SIGINT)
 	defer cancel()
@@ -39,11 +40,15 @@ func Run(ctx context.Context, configFile string) error {
 		return fmt.Errorf("failed to create init table Users: %w", err)
 	}
 
-	layer := api.NewAPI(postgresRepository)
+	layer := api.NewAPI(postgresRepository) // TODO add template
 
 	server := http.Server{
 		Addr:    cfg.ServerConfig.Address,
 		Handler: layer.Muxer(),
+	}
+
+	if port > 0 && templatePath != "" {
+		server.Addr = strconv.Itoa(port)
 	}
 
 	serverErrors := make(chan error, 1)

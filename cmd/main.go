@@ -18,10 +18,22 @@ func main() {
 				Value:   "./config/config.yaml",
 				EnvVars: []string{"CONFIG_FILE"},
 			},
+			&cli.IntFlag{
+				Name:    "port_num",
+				Aliases: []string{"p"},
+				Usage:   "set port_num",
+				Value:   8080,
+			},
+			&cli.StringFlag{
+				Name:    "template",
+				Aliases: []string{"t"},
+				Usage:   "set template path",
+				Value:   "./templates/index.html",
+			},
 		},
 
 		Action: func(c *cli.Context) error {
-			if err := Run(c.Context, c.App.Name, c.String("c")); err != nil {
+			if err := Run(c.Context, c.String("c"), c.Int("port"), c.String("template")); err != nil {
 				return err
 			}
 			return nil
