@@ -33,6 +33,8 @@ fmt:
 lint: ## Run all the linters
 	docker run --rm -v $(PWD):/app -w /app golangci/golangci-lint:v1.59.1 golangci-lint run ./...
 
+run-linux:
+	make build-linux && cd ./build && ./app-linux -p 3000 -t ../static -c ../config/config.yaml
 
 run-local:
 	make build && cd ./build && ./app -p 3000 -t ../static -c ../config/config.yaml
