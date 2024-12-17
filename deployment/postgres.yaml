@@ -1,0 +1,19 @@
+services:
+  postgres:
+    container_name: postgres
+    image: postgres:16
+    ports:
+      - "5432:5432"
+    #    volumes:
+    #      - local_postgres:/var/lib/postgresql
+    #      - ./deployment/init.sql:/docker-entrypoint-initdb.d/init.sql
+    environment:
+      - POSTGRES_DB=users
+      - POSTGRES_USER=gorm
+      - POSTGRES_PASSWORD=gorm
+    networks:
+      - app_network
+
+networks:
+  app_network:
+    driver: bridge

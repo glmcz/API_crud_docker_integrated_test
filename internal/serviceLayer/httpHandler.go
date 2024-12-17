@@ -32,6 +32,10 @@ func NewServiceLayer(dbConnection interface{}, templatePath string) *ServiceLaye
 		return nil
 	}
 
+	if len(files) == 0 {
+		return nil
+	}
+
 	t, err := template.ParseFiles(files...)
 	if err != nil {
 		return nil
@@ -94,6 +98,15 @@ func (a *ServiceLayer) postRenderRequest(w http.ResponseWriter, r *http.Request)
 		response.WriteResponse(w)
 		return
 	}
+	//define max Json size
+	if len(jsonInput) >= 1024*1024 {
+		response := utils.HttpResponse{
+			Code: http.StatusBadRequest,
+			Msg:  "JSON input size is to large",
+		}
+		response.WriteResponse(w)
+	}
+
 	var validThread model.Thread
 
 	res, err := JsonParsing(jsonInput, validThread)
@@ -117,9 +130,11 @@ func (a *ServiceLayer) postRenderRequest(w http.ResponseWriter, r *http.Request)
 	}
 }
 
+// JsonParsing
+// Any extra unknown keys will be ignored.
 func JsonParsing(jsonData string, structure model.Thread) (interface{}, error) {
 	decoder := json.NewDecoder(strings.NewReader(jsonData))
-	decoder.DisallowUnknownFields()
+	//decoder.DisallowUnknownFields() we don't need to throw error only just omit it.
 
 	err := decoder.Decode(&structure)
 	if err != nil {
@@ -132,12 +147,17 @@ func JsonParsing(jsonData string, structure model.Thread) (interface{}, error) {
 			return structure, fmt.Errorf("type error at %v: %v", unmarshalTypeError.Field, err)
 		case errors.As(err, &syntaxError):
 			return structure, fmt.Errorf("json syntax error: %v", err)
-		case strings.Contains(err.Error(), "json: unknown field"):
-			//field := extractFieldName(err.Error())
-			return structure, err
+		//case strings.Contains(err.Error(), "json: unknown field"):
+		//field := extractFieldName(err.Error())
+		//	return structure, err
 		default:
 			return structure, err
 		}
+	}
+
+	err = validateRequiredFields(&structure)
+	if err != nil {
+		return nil, err
 	}
 
 	return structure, nil
@@ -145,6 +165,14 @@ func JsonParsing(jsonData string, structure model.Thread) (interface{}, error) {
 
 func isEmpty(str string) bool {
 	return strings.TrimSpace(str) == ""
+}
+
+// validate field was not inside task
+func validateRequiredFields(input *model.Thread) error {
+	if isEmpty(input.ThreatName) {
+		return errors.New("ThreatName is required")
+	}
+	return nil
 }
 
 /********** End of Eset task ***********/

@@ -37,7 +37,7 @@ run-linux:
 	make build-linux && cd ./build && ./app-linux -p 3000 -t ../static -c ../config/config.yaml
 
 run-local:
-	make build && cd ./build && ./app -p 3000 -t ../static -c ../config/config.yaml
+	make postgres-up && make build && cd ./build && sleep 1 && ./app -p 3001 -t ../static -c ../config/config.yaml
 
 
 #run app and db in docker
@@ -46,7 +46,6 @@ compose-up:
 
 compose-down:
 	cd deployment && docker-compose -f compose.yaml down
-
 
 postgres-up:
 	cd deployment && docker-compose -f postgres.yaml up -d
